@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/css/bootstrap.min.css"  />
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script src="angulerjs/app.js"></script>
+
+</head>
+<body>
+
+<div ng-app="MyApp" ng-controller="MyController">
+	
+	<div class="container">
+		<!--------------------->
+		<!---- Compte ----->
+		<div class="card mt-5">
+			<h2 class="card-header bg-success text-white">
+				Compte
+			</h2>
+			<div class="card-body">
+				<div class="row">
+
+					<div class="p-2 col-6">
+						<form  method="get">
+		
+							<label>Code Compte: </label>
+							<div class="input-group">
+							<input type="text" class="form-control" placeholder="CC" name="codeCompte" ng-model="codeCompte"  />
+							<div class="input-group-append">
+								<button class="btn btn-outline-secondary" type="submit" ng-click="search()">Search</button>
+							</div>
+							</div>
+		
+						</form>
+					</div>
+
+					<div class="col-6" ng-if="compte">
+						<div>
+							<label>Solde: </label>
+							<label>{{ compte.solde }} </label>
+						</div>
+						<div>
+							<label>Date creation: </label>
+							<label>{{ compte.dateCreateion }}</label>
+						</div>
+						<div>
+							<label>Type: </label>
+							<label>{{ compte.type }} </label>
+						</div>
+						<div ng-if="compte.taux">
+							<label>Taux: </label>
+							<label>{{ compte.taux }}</label>
+						</div>
+						<div ng-if="compte.decouvert">
+							<label>decouvert: </label>
+							<label>{{ compte.decouvert }}</label>
+						</div>
+					</div>
+					<div class="col-6" ng-if="!compte">
+						{{ errorMessage }}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" ng-if="compte">
+			<!--------------------->
+			<!---- Client ----->
+			<div class="col-6">
+				<div class="card mt-5">
+					<h2 class="card-header bg-success text-white">
+						Client
+					</h2>
+					<div class="card-body">
+						<div>
+							<div>
+								<label>Code: </label>
+								<label>{{ compte.client.code }} </label>
+							</div>
+							<div>
+								<label>Nom: </label>
+								<label>{{ compte.client.nom }}</label>
+							</div>
+							<div>
+								<label>Address: </label>
+								<label>{{ compte.client.address }} </label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--------------------->
+			<!---- Employe ----->
+			<div class="col-6">
+				<div class="card mt-5">
+					<h2 class="card-header bg-success text-white">
+						Employe
+					</h2>
+					<div class="card-body">
+						<div>
+							<div>
+								<label>Code: </label>
+								<label>{{ compte.employe.code}} </label>
+							</div>
+							<div>
+								<label>Nom: </label>
+								<label>{{ compte.employe.nom }}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--------------------->
+		<!---- Operations ----->
+		<div class="row" ng-if="compte">
+			<div class="col-6">
+
+				<div class="card mt-2" >
+					<h2 class="card-header bg-success text-white">
+						add operation
+					</h2>
+					<div class="card-body">
+						<form>
+							<div class="form-group">
+								<label >Versement: </label>
+								<input type="radio" ng-model="operation.type" value="versement"/>
+
+								<label >Retrait: </label>
+								<input type="radio" ng-model="operation.type" value="retrait"/>
+							</div>	
+							<div class="form-group">
+								<label>Montant: </label>
+								<input type="text" ng-model="operation.montant"/>
+								<button class="btn btn-primary" ng-click="saveOperation()">Save</button>
+							</div>
+							<div ng-if="errorMessage">
+								{{ errorMessage }}
+							</div>	
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="card mt-2">
+					<h1 class="card-header bg-success text-white">Operations</h1>
+					<div class="card-body p-0">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<td>Code</td>
+									<td>Montant</td>
+									<td>Type</td>
+									<td>Date Sociale</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="e in pageOperations.operations">
+									<td>{{ e.numero }}</td>
+									<td>{{e.montant}}</td>
+									<td>{{e.type}}</td>
+									<td>{{e.date}}</td>
+								</tr>
+							</tbody>
+						</table>
+					
+						<div class="d-flex justify-content-center">
+							<nav aria-label="Page navigation example">
+							<ul class="pagination">
+								<li ng-repeat="i in pages track by $index" class="list-item" ng-class="{active:$index==pageCounter}">
+									<a class="page-link" ng-click="gotoPage($index)"> {{$index+1}} </a>
+								</li>
+							</ul>
+							</nav>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		
+	</div>
+</div>
+
+
+
+</body>
+</html>
